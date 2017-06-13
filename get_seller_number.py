@@ -15,9 +15,12 @@ def parse_id_product(html):
     id_product = re.search(r'(?<=ID)[\w\W]*?(?=\.html)', html)
     return str(id_product.group(0))
 
-def scrab_number(html):
-    pass
-
+def scrab_number(phone_response):
+    if 'block' in phone_response:
+        phone = re.search(r'(?<=">)[\w\W]*?(?=<)', phone_response)
+    else:
+        phone = re.search(r'(?<=":")[\w\W]*?(?=")', phone_response)
+    return str(phone.group(0))
 # get cookie
 def get_cookie(response):
     return response.getheader('Set-Cookie')
