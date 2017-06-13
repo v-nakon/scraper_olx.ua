@@ -37,7 +37,9 @@ def write_to_file(path_file, list_products):
 
         #time.sleep(2)
         try:
-            phone = get_seller_number.get_response_phone(id_post, cookie, token)
+            phone_response = get_seller_number.get_response_phone(id_post, cookie, token)
+            phone = get_seller_number.scrab_number(phone_response)
+            print(phone)
             file.write(link + '|' + phone + '\n')
         except:
             print("Product don't have number phone")
