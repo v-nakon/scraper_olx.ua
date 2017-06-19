@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
 import get_seller_number
 import re
 import urllib.request
+import logging
 import time
+logging.basicConfig(level = logging.DEBUG)
 
 
 url = 'https://www.olx.ua/if/q-macbook/' #main page
@@ -28,6 +31,7 @@ def write_to_file(path_file, list_products):
     for pr in list_products:
         link = scrab_product_link(pr)
         response = get_response(link)
+        logging.debug('Work with page - ' + "[" + link + "]")
         str_response = str(response.read().decode("utf-8"))
         token = get_seller_number.parse_token(str_response)
         id_post = get_seller_number.parse_id_product(str_response)
@@ -39,10 +43,11 @@ def write_to_file(path_file, list_products):
         try:
             phone_response = get_seller_number.get_response_phone(id_post, cookie, token)
             phone = get_seller_number.scrab_number(phone_response)
-            print(phone)
+            logging.debug('Parse phone - ' + "[" + phone + "]")
             file.write(link + '|' + phone + '\n')
         except:
-            print("Product don't have number phone")
+            logging.warning("Product don't have number phone - " + "[" + link + "]")
+
 
     file.close()
 
@@ -54,8 +59,9 @@ def get_max_page(html):
 
 
 def main():
+    path_file = 'product.txt' # file for result
     count_page = 1 # start page
-    url_page = url + '?page=' + str(count_page)
+
     response = get_response(url)
     max_page = int(get_max_page(str(response.read().decode("utf-8"))))
 
@@ -63,13 +69,14 @@ def main():
 
     while max_page >= count_page:
         url_page = url + '?page=' + str(count_page)
-        print('PAGE - [' + str(count_page) + ']')
+        logging.info('PAGE - [' + str(count_page) + ']')
         html = get_response(url_page)
         list_product = scrab_product(str(html.read().decode("utf-8")))
-        write_to_file('product.txt', list_product)
+        logging.debug('Scrape list of products on page')
+        write_to_file(path_file, list_product)
         count_page += 1
 
-    print('OK!')
+    logging.info('OK!')
 
 
 if __name__ == '__main__':

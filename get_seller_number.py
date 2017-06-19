@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import re
 import urllib.request
+
 
 def get_response_phone(id_product, cookie, token):
     url = 'https://www.olx.ua/ajax/misc/contact/phone/' + id_product +'/?pt=' + token
@@ -21,6 +23,7 @@ def scrab_number(phone_response):
     else:
         phone = re.search(r'(?<=":")[\w\W]*?(?=")', phone_response)
     return str(phone.group(0))
+
 # get cookie
 def get_cookie(response):
     return response.getheader('Set-Cookie')
