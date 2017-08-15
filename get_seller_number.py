@@ -24,6 +24,7 @@ def scrab_number(phone_response):
         phone = re.search(r'(?<=":")[\w\W]*?(?=")', phone_response)
     return str(phone.group(0))
 
-# get cookie
+
 def get_cookie(response):
+    """get cookie """
     return response.getheader('Set-Cookie')
