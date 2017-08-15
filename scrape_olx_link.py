@@ -9,23 +9,27 @@ logging.basicConfig(level = logging.DEBUG)
 
 url = 'https://www.olx.ua/if/q-macbook/' #main page
 
-# get html
+
 def get_response(url):
+    """get html """
     response = urllib.request.urlopen(url)
     return response
 
-# get list of products on page
+
 def scrab_product(html):
+    """get list of products on page """
     products = re.findall(r'(?<=<h3\ class="x-large)[\w\W]*?<div\ class="rel\ observelinkinfo', html)
     return products
 
-# get product link
+
 def scrab_product_link(product):
+    """get product link """
     link = re.search(r'(?<=a\ href=")[\w\W]*?\.html', product)
     return str(link.group(0))
 
-# write product links in .txt file
+
 def write_to_file(path_file, list_products):
+    """write product links in .txt file """
     file = open(path_file,"a")
 
     for pr in list_products:
@@ -51,8 +55,9 @@ def write_to_file(path_file, list_products):
 
     file.close()
 
-# get the last page
+
 def get_max_page(html):
+    """get the last page """
     max_page = re.search(r'(?<="page_count":").*?(?=")', html)
     return str(max_page.group(0))
 
